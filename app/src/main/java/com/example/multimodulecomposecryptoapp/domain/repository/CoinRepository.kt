@@ -2,6 +2,7 @@ package com.example.multimodulecomposecryptoapp.domain.repository
 
 import com.example.multimodulecomposecryptoapp.core.common.Resource
 import com.example.multimodulecomposecryptoapp.domain.model.Coin
+import com.example.multimodulecomposecryptoapp.domain.model.CoinDetail
 import kotlinx.coroutines.flow.Flow
 
 interface CoinRepository {
@@ -19,4 +20,6 @@ interface CoinRepository {
     suspend fun isCoinFavorite(coinId: String): Boolean
     
     suspend fun toggleFavorite(coin: Coin)
+    
+    suspend fun getCoinDetail(coinId: String): Resource<CoinDetail>
 } 

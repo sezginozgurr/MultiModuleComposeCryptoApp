@@ -5,8 +5,10 @@ import com.example.multimodulecomposecryptoapp.core.common.map
 import com.example.multimodulecomposecryptoapp.core.network.safeApiCall
 import com.example.multimodulecomposecryptoapp.data.local.dao.CoinDao
 import com.example.multimodulecomposecryptoapp.data.local.entity.CoinEntity
+import com.example.multimodulecomposecryptoapp.data.mapper.toCoinDetail
 import com.example.multimodulecomposecryptoapp.data.remote.api.CoinRankingApi
 import com.example.multimodulecomposecryptoapp.domain.model.Coin
+import com.example.multimodulecomposecryptoapp.domain.model.CoinDetail
 import com.example.multimodulecomposecryptoapp.domain.repository.CoinRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -63,6 +65,15 @@ class CoinRepositoryImpl @Inject constructor(
             removeCoinFromFavorites(coin.id)
         } else {
             addCoinToFavorites(coin)
+        }
+    }
+    
+    override suspend fun getCoinDetail(coinId: String): Resource<CoinDetail> {
+        return safeApiCall {
+            api.getCoinDetail(coinId)
+        }.map { response ->
+            val isFavorite = isCoinFavorite(coinId)
+            response.data.coin.toCoinDetail(isFavorite)
         }
     }
 } 

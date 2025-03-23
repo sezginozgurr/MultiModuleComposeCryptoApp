@@ -108,7 +108,6 @@ fun HomeScreen(
                 )
             } else {
                 Column(modifier = Modifier.fillMaxSize()) {
-                    // Header Section
                     ElevatedCard(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -135,7 +134,6 @@ fun HomeScreen(
                         }
                     }
                     
-                    // List of coins
                     LazyColumn(
                         modifier = Modifier.fillMaxSize()
                     ) {

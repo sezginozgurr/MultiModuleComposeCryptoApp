@@ -6,5 +6,6 @@ data class CoinUseCases @Inject constructor(
     val getCoins: GetCoinsUseCase,
     val getCoinById: GetCoinByIdUseCase,
     val getFavoriteCoins: GetFavoriteCoinsUseCase,
-    val toggleFavorite: ToggleFavoriteUseCase
+    val toggleFavorite: ToggleFavoriteUseCase,
+    val getCoinDetail: GetCoinDetailUseCase
 ) 

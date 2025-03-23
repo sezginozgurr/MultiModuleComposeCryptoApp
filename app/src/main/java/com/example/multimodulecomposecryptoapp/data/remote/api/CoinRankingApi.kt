@@ -1,7 +1,9 @@
 package com.example.multimodulecomposecryptoapp.data.remote.api
 
+import com.example.multimodulecomposecryptoapp.data.remote.dto.CoinDetailResponseDto
 import com.example.multimodulecomposecryptoapp.data.remote.dto.CoinsResponseDto
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface CoinRankingApi {
@@ -18,4 +20,9 @@ interface CoinRankingApi {
     suspend fun getCoinById(
         @Query(Endpoints.Params.UUID) coinId: String
     ): CoinsResponseDto
+    
+    @GET("${Endpoints.COIN_DETAILS}/{coinId}")
+    suspend fun getCoinDetail(
+        @Path("coinId") coinId: String
+    ): CoinDetailResponseDto
 } 

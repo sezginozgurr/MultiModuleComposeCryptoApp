@@ -53,7 +53,6 @@ class HomeViewModel @Inject constructor(
     private fun toggleFavorite(coin: Coin) {
         viewModelScope.launch {
             coinUseCases.toggleFavorite(coin)
-            // State otomatik olarak repository akışı üzerinden güncellenecek
         }
     }
 } 

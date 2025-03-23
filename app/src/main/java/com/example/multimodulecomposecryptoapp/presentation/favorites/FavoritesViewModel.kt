@@ -40,7 +40,6 @@ class FavoritesViewModel @Inject constructor(
     fun toggleFavorite(coin: Coin) {
         viewModelScope.launch {
             coinUseCases.toggleFavorite(coin)
-            // Favori listesi akış ile güncellenecek
         }
     }
 } 
