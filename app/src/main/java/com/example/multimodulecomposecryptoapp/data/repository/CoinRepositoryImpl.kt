@@ -1,8 +1,8 @@
 package com.example.multimodulecomposecryptoapp.data.repository
 
-import com.example.multimodulecomposecryptoapp.core.common.Resource
-import com.example.multimodulecomposecryptoapp.core.common.map
-import com.example.multimodulecomposecryptoapp.core.network.safeApiCall
+import com.example.common.core.common.Resource
+import com.example.common.core.common.map
+import com.example.common.core.network.safeApiCall
 import com.example.multimodulecomposecryptoapp.data.local.dao.CoinDao
 import com.example.multimodulecomposecryptoapp.data.local.entity.CoinEntity
 import com.example.multimodulecomposecryptoapp.data.mapper.toCoinDetail

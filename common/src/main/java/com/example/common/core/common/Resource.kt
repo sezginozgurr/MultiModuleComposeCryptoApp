@@ -1,4 +1,4 @@
-package com.example.multimodulecomposecryptoapp.core.common
+package com.example.common.core.common
 
 sealed class Resource<out T> {
     data class Success<out T : Any>(val data: T) : Resource<T>()

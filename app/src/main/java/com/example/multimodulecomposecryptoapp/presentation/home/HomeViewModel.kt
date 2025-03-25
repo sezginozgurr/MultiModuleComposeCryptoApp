@@ -2,9 +2,9 @@ package com.example.multimodulecomposecryptoapp.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.multimodulecomposecryptoapp.core.common.fold
-import com.example.multimodulecomposecryptoapp.core.ui.mvi.MVI
-import com.example.multimodulecomposecryptoapp.core.ui.mvi.mvi
+import com.example.common.core.common.fold
+import com.example.common.core.ui.mvi.MVI
+import com.example.common.core.ui.mvi.mvi
 import com.example.multimodulecomposecryptoapp.domain.model.Coin
 import com.example.multimodulecomposecryptoapp.domain.use_case.CoinUseCases
 import com.example.multimodulecomposecryptoapp.presentation.home.HomeContract.UiAction

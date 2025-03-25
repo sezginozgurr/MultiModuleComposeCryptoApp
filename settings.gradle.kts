@@ -21,4 +21,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "MultiModuleComposeCryptoApp"
 include(":app")
- 
+include(":common")
+include(":feature")
+include(":feature:home")

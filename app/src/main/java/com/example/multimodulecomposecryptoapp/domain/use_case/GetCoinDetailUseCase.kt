@@ -1,6 +1,6 @@
 package com.example.multimodulecomposecryptoapp.domain.use_case
 
-import com.example.multimodulecomposecryptoapp.core.common.Resource
+import com.example.common.core.common.Resource
 import com.example.multimodulecomposecryptoapp.domain.model.CoinDetail
 import com.example.multimodulecomposecryptoapp.domain.repository.CoinRepository
 import javax.inject.Inject

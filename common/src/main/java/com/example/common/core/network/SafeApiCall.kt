@@ -1,11 +1,11 @@
-package com.example.multimodulecomposecryptoapp.core.network
+package com.example.common.core.network
 
-import com.example.multimodulecomposecryptoapp.core.common.AuthorizationException
-import com.example.multimodulecomposecryptoapp.core.common.BadRequestException
-import com.example.multimodulecomposecryptoapp.core.common.NetworkException
-import com.example.multimodulecomposecryptoapp.core.common.NotFoundException
-import com.example.multimodulecomposecryptoapp.core.common.Resource
-import com.example.multimodulecomposecryptoapp.core.common.UnknownException
+import com.example.common.core.common.AuthorizationException
+import com.example.common.core.common.BadRequestException
+import com.example.common.core.common.NetworkException
+import com.example.common.core.common.NotFoundException
+import com.example.common.core.common.Resource
+import com.example.common.core.common.UnknownException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException

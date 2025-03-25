@@ -1,4 +1,4 @@
-package com.example.multimodulecomposecryptoapp.core.ui.mvi
+package com.example.common.core.ui.mvi
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow

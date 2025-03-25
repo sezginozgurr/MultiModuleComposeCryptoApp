@@ -1,4 +1,4 @@
-package com.example.multimodulecomposecryptoapp.core.common
+package com.example.common.core.common
 
 open class BaseException(message: String) : Exception(message)
 

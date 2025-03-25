@@ -1,4 +1,4 @@
-package com.example.multimodulecomposecryptoapp.core.ui.extensions
+package com.example.common.core.ui.extensions
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect

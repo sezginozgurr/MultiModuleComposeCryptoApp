@@ -19,15 +19,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -35,7 +33,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.multimodulecomposecryptoapp.core.ui.extensions.collectWithLifecycle
 import com.example.multimodulecomposecryptoapp.presentation.home.HomeContract.UiAction
 import com.example.multimodulecomposecryptoapp.presentation.home.components.CoinItem
 
@@ -46,18 +43,21 @@ fun HomeScreen(
     onCoinClick: (String) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    
-    viewModel.uiEffect.collectWithLifecycle { effect ->
-        when (effect) {
-            is HomeContract.UiEffect.ShowError -> {
-                //snackbarHostState.showSnackbar(effect.message)
-            }
-            is HomeContract.UiEffect.NavigateToDetail -> {
-                onCoinClick(effect.coinId)
+
+    LaunchedEffect(Unit) {
+        viewModel.uiEffect.collect { effect ->
+            when (effect) {
+                is HomeContract.UiEffect.ShowError -> {
+                    //snackbarHostState.showSnackbar(effect.message)
+                }
+
+                is HomeContract.UiEffect.NavigateToDetail -> {
+                    onCoinClick(effect.coinId)
+                }
             }
         }
     }
-    
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -123,9 +123,9 @@ fun HomeScreen(
                                     fontSize = 22.sp
                                 )
                             )
-                            
+
                             Spacer(modifier = Modifier.height(12.dp))
-                            
+
                             FilterChip(
                                 selected = true,
                                 onClick = { },
@@ -133,7 +133,7 @@ fun HomeScreen(
                             )
                         }
                     }
-                    
+
                     LazyColumn(
                         modifier = Modifier.fillMaxSize()
                     ) {
