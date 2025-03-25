@@ -33,6 +33,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.multimodulecomposecryptoapp.presentation.components.PullToRefreshBox
 import com.example.multimodulecomposecryptoapp.presentation.home.HomeContract.UiAction
 import com.example.multimodulecomposecryptoapp.presentation.home.components.CoinItem
 
@@ -107,42 +108,47 @@ fun HomeScreen(
                         .align(Alignment.Center)
                 )
             } else {
-                Column(modifier = Modifier.fillMaxSize()) {
-                    ElevatedCard(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp)
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(16.dp)
+                PullToRefreshBox(
+                    isRefreshing = uiState.isLoading,
+                    onRefresh = { viewModel.onAction(UiAction.RefreshCoins) }
+                ) {
+                    Column(modifier = Modifier.fillMaxSize()) {
+                        ElevatedCard(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
                         ) {
-                            Text(
-                                text = "Ranking List",
-                                style = MaterialTheme.typography.titleLarge.copy(
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 22.sp
+                            Column(
+                                modifier = Modifier.padding(16.dp)
+                            ) {
+                                Text(
+                                    text = "Ranking List",
+                                    style = MaterialTheme.typography.titleLarge.copy(
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 22.sp
+                                    )
                                 )
-                            )
 
-                            Spacer(modifier = Modifier.height(12.dp))
+                                Spacer(modifier = Modifier.height(12.dp))
 
-                            FilterChip(
-                                selected = true,
-                                onClick = { },
-                                label = { Text("24h Vol") }
-                            )
+                                FilterChip(
+                                    selected = true,
+                                    onClick = { },
+                                    label = { Text("24h Vol") }
+                                )
+                            }
                         }
-                    }
 
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        items(uiState.coins) { coin ->
-                            CoinItem(
-                                coin = coin,
-                                onCoinClick = { viewModel.onAction(UiAction.NavigateToDetail(coin.id)) },
-                                onFavoriteClick = { viewModel.onAction(UiAction.ToggleFavorite(coin)) }
-                            )
+                        LazyColumn(
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            items(uiState.coins) { coin ->
+                                CoinItem(
+                                    coin = coin,
+                                    onCoinClick = { viewModel.onAction(UiAction.NavigateToDetail(coin.id)) },
+                                    onFavoriteClick = { viewModel.onAction(UiAction.ToggleFavorite(coin)) }
+                                )
+                            }
                         }
                     }
                 }
