@@ -15,16 +15,16 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.multimodulecomposecryptoapp.R
 import com.example.multimodulecomposecryptoapp.presentation.home.components.CoinItem
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -35,37 +35,31 @@ fun FavoritesScreen(
 ) {
     val state by viewModel.state.collectAsState()
     
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Favori Kriptolar") },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                ),
-                actions = {
-                    IconButton(onClick = { viewModel.getFavoriteCoins() }) {
-                        Icon(
-                            imageVector = Icons.Default.Refresh,
-                            contentDescription = "Yenile"
-                        )
-                    }
-                }
-            )
-        }
-    ) { padding ->
+    Scaffold { padding ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
         ) {
+            IconButton(
+                onClick = { viewModel.getFavoriteCoins() },
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(8.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Refresh,
+                    contentDescription = stringResource(R.string.action_refresh)
+                )
+            }
+
             if (state.isLoading) {
                 CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center)
                 )
             } else if (state.error != null) {
                 Text(
-                    text = state.error ?: "Bilinmeyen bir hata oluştu",
+                    text = state.error ?: stringResource(R.string.error_unknown),
                     color = MaterialTheme.colorScheme.error,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
@@ -75,7 +69,7 @@ fun FavoritesScreen(
                 )
             } else if (state.coins.isEmpty()) {
                 Text(
-                    text = "Favori kripto paranız bulunmamaktadır",
+                    text = stringResource(R.string.error_favorites_empty),
                     style = MaterialTheme.typography.bodyLarge,
                     textAlign = TextAlign.Center,
                     modifier = Modifier

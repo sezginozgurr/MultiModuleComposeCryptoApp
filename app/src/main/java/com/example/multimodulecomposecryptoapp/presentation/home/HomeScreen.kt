@@ -25,11 +25,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.multimodulecomposecryptoapp.R
 import com.example.multimodulecomposecryptoapp.presentation.components.PullToRefreshBox
 import com.example.multimodulecomposecryptoapp.presentation.home.HomeContract.UiAction
 import com.example.multimodulecomposecryptoapp.presentation.home.components.CoinItem
@@ -78,7 +80,7 @@ fun HomeScreen(
                 )
             } else if (uiState.error != null) {
                 Text(
-                    text = uiState.error ?: "Bilinmeyen bir hata oluştu",
+                    text = uiState.error ?: stringResource(R.string.error_unknown),
                     color = MaterialTheme.colorScheme.error,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
@@ -88,7 +90,7 @@ fun HomeScreen(
                 )
             } else if (uiState.coins.isEmpty()) {
                 Text(
-                    text = "Kripto para listesi bulunamadı",
+                    text = stringResource(R.string.error_coin_list_empty),
                     style = MaterialTheme.typography.bodyLarge,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
@@ -115,7 +117,7 @@ fun HomeScreen(
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     Text(
-                                        text = "Ranking List",
+                                        text = stringResource(R.string.screen_home_ranking_title),
                                         style = MaterialTheme.typography.titleLarge.copy(
                                             fontWeight = FontWeight.Bold,
                                             fontSize = 22.sp
@@ -126,7 +128,7 @@ fun HomeScreen(
                                     FilterChip(
                                         selected = true,
                                         onClick = { },
-                                        label = { Text("24h Vol") }
+                                        label = { Text(stringResource(R.string.screen_home_24h_volume)) }
                                     )
                                 }
 

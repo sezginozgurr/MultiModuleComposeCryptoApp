@@ -34,10 +34,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.multimodulecomposecryptoapp.R
 import java.math.BigDecimal
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -79,7 +81,7 @@ fun DetailScreen(
                         IconButton(onClick = onBackClick) {
                             Icon(
                                 imageVector = Icons.Default.ArrowBack,
-                                contentDescription = "Geri"
+                                contentDescription = stringResource(R.string.action_back)
                             )
                         }
                     },
@@ -90,7 +92,7 @@ fun DetailScreen(
                                     Icons.Default.Favorite 
                                 else 
                                     Icons.Default.FavoriteBorder,
-                                contentDescription = "Favorilere Ekle",
+                                contentDescription = stringResource(R.string.action_add_favorite),
                                 tint = if (coinDetail?.isFavorite == true) 
                                     Color.Red 
                                 else 
@@ -100,7 +102,7 @@ fun DetailScreen(
                         IconButton(onClick = { /* Bildirim işlemi */ }) {
                             Icon(
                                 imageVector = Icons.Default.Notifications,
-                                contentDescription = "Bildirimler"
+                                contentDescription = stringResource(R.string.action_notifications)
                             )
                         }
                     },
@@ -157,35 +159,35 @@ fun DetailScreen(
                         Spacer(modifier = Modifier.height(16.dp))
                         
                         InfoCard(
-                            title = "Kripto Para Bilgileri",
+                            title = stringResource(R.string.screen_detail_title),
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            InfoRow(label = "Adı", value = detail.name)
-                            InfoRow(label = "Sembol", value = detail.symbol)
-                            InfoRow(label = "Sıralama", value = "#${detail.rank}")
-                            InfoRow(label = "Listelenme Tarihi", value = formatDate(detail.listingDate))
+                            InfoRow(label = stringResource(R.string.coin_info_name), value = detail.name)
+                            InfoRow(label = stringResource(R.string.coin_info_symbol), value = detail.symbol)
+                            InfoRow(label = stringResource(R.string.coin_info_rank), value = "#${detail.rank}")
+                            InfoRow(label = stringResource(R.string.coin_info_listing_date), value = formatDate(detail.listingDate))
                         }
                         
                         Spacer(modifier = Modifier.height(16.dp))
                         
                         InfoCard(
-                            title = "İstatistikler",
+                            title = stringResource(R.string.coin_stats),
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             InfoRow(
-                                label = "Piyasa Değeri", 
+                                label = stringResource(R.string.coin_market_cap), 
                                 value = "₺${formatLargeNumber(detail.marketCap)}"
                             )
                             InfoRow(
-                                label = "24s Hacim", 
+                                label = stringResource(R.string.coin_24h_volume), 
                                 value = "₺${formatLargeNumber(detail.volume)}"
                             )
                             InfoRow(
-                                label = "Toplam Arz", 
+                                label = stringResource(R.string.coin_total_supply), 
                                 value = formatLargeNumber(detail.totalSupply)
                             )
                             InfoRow(
-                                label = "Dolaşımdaki Arz", 
+                                label = stringResource(R.string.coin_circulating_supply), 
                                 value = formatLargeNumber(detail.circulatingSupply)
                             )
                         }
@@ -193,15 +195,15 @@ fun DetailScreen(
                         Spacer(modifier = Modifier.height(16.dp))
                         
                         InfoCard(
-                            title = "Tüm Zamanların En Yükseği",
+                            title = stringResource(R.string.coin_all_time_high),
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             InfoRow(
-                                label = "Fiyat", 
+                                label = stringResource(R.string.coin_price), 
                                 value = "₺${formatLargePrice(detail.allTimeHighPrice)}"
                             )
                             InfoRow(
-                                label = "Tarih", 
+                                label = stringResource(R.string.coin_date), 
                                 value = formatDate(detail.allTimeHighDate)
                             )
                         }
@@ -210,7 +212,7 @@ fun DetailScreen(
                             Spacer(modifier = Modifier.height(16.dp))
                             
                             InfoCard(
-                                title = "Açıklama",
+                                title = stringResource(R.string.coin_description),
                                 modifier = Modifier.fillMaxWidth()
                             ) {
                                 Text(

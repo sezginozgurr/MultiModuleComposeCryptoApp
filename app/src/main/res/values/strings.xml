@@ -1,3 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">MultiModuleComposeCryptoApp</string>
+    
+    <!-- Navigation -->
+    <string name="nav_home">Anasayfa</string>
+    <string name="nav_favorites">Favoriler</string>
+    
+    <!-- Screens -->
+    <string name="screen_favorites_title">Favori Kriptolar</string>
+    <string name="screen_detail_title">Kripto Para Bilgileri</string>
+    <string name="screen_home_ranking_title">Ranking List</string>
+    <string name="screen_home_24h_volume">24h Vol</string>
+    
+    <!-- Actions -->
+    <string name="action_refresh">Yenile</string>
+    <string name="action_back">Geri</string>
+    <string name="action_add_favorite">Favorilere Ekle</string>
+    <string name="action_notifications">Bildirimler</string>
+    
+    <!-- Coin Details -->
+    <string name="coin_stats">İstatistikler</string>
+    <string name="coin_market_cap">Piyasa Değeri</string>
+    <string name="coin_24h_volume">24s Hacim</string>
+    <string name="coin_total_supply">Toplam Arz</string>
+    <string name="coin_circulating_supply">Dolaşımdaki Arz</string>
+    <string name="coin_all_time_high">Tüm Zamanların En Yükseği</string>
+    <string name="coin_price">Fiyat</string>
+    <string name="coin_date">Tarih</string>
+    <string name="coin_description">Açıklama</string>
+    <string name="coin_current_price">GÜNCEL FİYAT</string>
+    <string name="coin_high">Yüksek: </string>
+    <string name="coin_low">Düşük: </string>
+    
+    <!-- Coin Info -->
+    <string name="coin_info_name">Adı</string>
+    <string name="coin_info_symbol">Sembol</string>
+    <string name="coin_info_rank">Sıralama</string>
+    <string name="coin_info_listing_date">Listelenme Tarihi</string>
+    
+    <!-- Errors -->
+    <string name="error_unknown">Bilinmeyen bir hata oluştu</string>
+    <string name="error_coin_list_empty">Kripto para listesi bulunamadı</string>
+    <string name="error_favorites_empty">Favori kripto paranız bulunmamaktadır</string>
+    <string name="error_coin_details">Coin detayları yüklenemedi: %1$s</string>
 </resources>
