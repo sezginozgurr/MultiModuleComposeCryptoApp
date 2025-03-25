@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface CoinRepository {
     
-    suspend fun getCoins(): Resource<Flow<List<Coin>>>
+    suspend fun getCoins(page: Int = 1, pageSize: Int = 50): Resource<Flow<List<Coin>>>
     
     suspend fun getCoinById(coinId: String): Resource<Coin>
     
@@ -22,4 +22,6 @@ interface CoinRepository {
     suspend fun toggleFavorite(coin: Coin)
     
     suspend fun getCoinDetail(coinId: String): Resource<CoinDetail>
+    
+    suspend fun refreshCoins(page: Int = 1, pageSize: Int = 50): Resource<Flow<List<Coin>>>
 } 

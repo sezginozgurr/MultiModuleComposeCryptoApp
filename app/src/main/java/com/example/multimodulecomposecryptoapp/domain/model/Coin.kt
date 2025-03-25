@@ -13,5 +13,7 @@ data class Coin(
     val volume: BigDecimal,
     val priceChangePercentage24h: Double,
     val listingDate: Date,
-    val isFavorite: Boolean = false
+    val isFavorite: Boolean = false,
+    val page: Int = 1,
+    val hasMore: Boolean = true
 ) 

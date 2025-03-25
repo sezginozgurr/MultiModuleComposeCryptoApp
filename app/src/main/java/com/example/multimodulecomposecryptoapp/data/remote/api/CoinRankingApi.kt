@@ -23,6 +23,6 @@ interface CoinRankingApi {
     
     @GET("${Endpoints.COIN_DETAILS}/{coinId}")
     suspend fun getCoinDetail(
-        @Path("coinId") coinId: String
+        @Path(Endpoints.COINID) coinId: String
     ): CoinDetailResponseDto
 } 

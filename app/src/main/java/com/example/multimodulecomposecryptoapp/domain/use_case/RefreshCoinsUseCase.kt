@@ -6,10 +6,10 @@ import com.example.multimodulecomposecryptoapp.domain.repository.CoinRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class GetCoinsUseCase @Inject constructor(
+class RefreshCoinsUseCase @Inject constructor(
     private val repository: CoinRepository
 ) {
     suspend operator fun invoke(page: Int = 1, pageSize: Int = 50): Resource<Flow<List<Coin>>> {
-        return repository.getCoins(page, pageSize)
+        return repository.refreshCoins(page, pageSize)
     }
 } 

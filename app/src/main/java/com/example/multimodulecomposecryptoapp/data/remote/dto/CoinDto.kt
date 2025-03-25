@@ -18,7 +18,7 @@ data class CoinDto(
     val change: String,
     val listedAt: Long
 ) {
-    fun toCoin(): Coin {
+    fun toCoin(page: Int = 1): Coin {
         return Coin(
             id = uuid,
             symbol = symbol,
@@ -29,7 +29,8 @@ data class CoinDto(
             volume = BigDecimal(volume),
             priceChangePercentage24h = change.toDouble(),
             listingDate = Date(listedAt * 1000L),
-            isFavorite = false
+            isFavorite = false,
+            page = page
         )
     }
 } 

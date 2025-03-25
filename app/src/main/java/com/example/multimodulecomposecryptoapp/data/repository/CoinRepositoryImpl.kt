@@ -21,9 +21,30 @@ class CoinRepositoryImpl @Inject constructor(
     private val dao: CoinDao
 ) : CoinRepository {
     
-    override suspend fun getCoins(): Resource<Flow<List<Coin>>> {
-        return safeApiCall { api.getCoins() }.map { response ->
-            val remoteCoins = response.data.coins.map { it.toCoin() }
+    override suspend fun getCoins(page: Int, pageSize: Int): Resource<Flow<List<Coin>>> {
+        return safeApiCall { 
+            api.getCoins(
+                limit = pageSize,
+                offset = (page - 1) * pageSize
+            )
+        }.map { response ->
+            val remoteCoins = response.data.coins.map { it.toCoin(page = page) }
+            getFavoriteCoins().map { favoriteCoins ->
+                remoteCoins.map { coin ->
+                    coin.copy(isFavorite = favoriteCoins.any { it.id == coin.id })
+                }
+            }
+        }
+    }
+    
+    override suspend fun refreshCoins(page: Int, pageSize: Int): Resource<Flow<List<Coin>>> {
+        return safeApiCall { 
+            api.getCoins(
+                limit = pageSize,
+                offset = (page - 1) * pageSize
+            )
+        }.map { response ->
+            val remoteCoins = response.data.coins.map { it.toCoin(page = page) }
             getFavoriteCoins().map { favoriteCoins ->
                 remoteCoins.map { coin ->
                     coin.copy(isFavorite = favoriteCoins.any { it.id == coin.id })

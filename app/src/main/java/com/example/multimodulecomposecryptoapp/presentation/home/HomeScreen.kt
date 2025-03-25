@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -21,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -39,6 +41,7 @@ fun HomeScreen(
     onCoinClick: (String) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val listState = rememberLazyListState()
 
     LaunchedEffect(Unit) {
         viewModel.uiEffect.collect { effect ->
@@ -52,6 +55,15 @@ fun HomeScreen(
                 }
             }
         }
+    }
+
+    LaunchedEffect(listState) {
+        snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }
+            .collect { lastIndex ->
+                if (lastIndex != null && lastIndex >= uiState.coins.size - 5 && !uiState.isLoadingMore) {
+                    viewModel.onAction(UiAction.LoadMoreCoins)
+                }
+            }
     }
 
     Scaffold { padding ->
@@ -123,6 +135,7 @@ fun HomeScreen(
                         }
 
                         LazyColumn(
+                            state = listState,
                             modifier = Modifier.fillMaxSize()
                         ) {
                             items(uiState.coins) { coin ->
@@ -131,6 +144,19 @@ fun HomeScreen(
                                     onCoinClick = { viewModel.onAction(UiAction.NavigateToDetail(coin.id)) },
                                     onFavoriteClick = { viewModel.onAction(UiAction.ToggleFavorite(coin)) }
                                 )
+                            }
+                            
+                            if (uiState.isLoadingMore) {
+                                item {
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(16.dp),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        CircularProgressIndicator()
+                                    }
+                                }
                             }
                         }
                     }

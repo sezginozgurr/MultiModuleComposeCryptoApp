@@ -4,6 +4,7 @@ object Endpoints {
 
     const val COINS = "v2/coins"
     const val COIN_DETAILS = "v2/coin"
+    const val COINID = "coinId"
 
     object Params {
         const val LIMIT = "limit"

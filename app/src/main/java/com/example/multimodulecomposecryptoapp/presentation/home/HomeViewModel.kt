@@ -26,7 +26,8 @@ class HomeViewModel @Inject constructor(
     override fun onAction(uiAction: UiAction) {
         viewModelScope.launch {
             when (uiAction) {
-                UiAction.RefreshCoins -> getCoins()
+                UiAction.RefreshCoins -> refreshCoins()
+                UiAction.LoadMoreCoins -> loadMoreCoins()
                 is UiAction.ToggleFavorite -> toggleFavorite(uiAction.coin)
                 is UiAction.NavigateToDetail -> emitUiEffect(UiEffect.NavigateToDetail(uiAction.coinId))
             }
@@ -36,10 +37,68 @@ class HomeViewModel @Inject constructor(
     private fun getCoins() {
         viewModelScope.launch {
             updateUiState { copy(isLoading = true, error = null) }
-            coinUseCases.getCoins().fold(
+            coinUseCases.getCoins(page = 1).fold(
                 onSuccess = { flowCoins ->
                     flowCoins.collect { coins ->
-                        updateUiState { copy(coins = coins, isLoading = false) }
+                        updateUiState { 
+                            copy(
+                                coins = coins,
+                                isLoading = false,
+                                currentPage = 1,
+                                hasMore = coins.isNotEmpty()
+                            )
+                        }
+                    }
+                },
+                onError = { exception ->
+                    updateUiState { copy(isLoading = false, error = exception.message) }
+                    emitUiEffect(UiEffect.ShowError(exception.message ?: "An unknown error occurred"))
+                }
+            )
+        }
+    }
+    
+    private fun loadMoreCoins() {
+        val currentState = uiState.value
+        if (currentState.isLoadingMore || !currentState.hasMore) return
+        
+        viewModelScope.launch {
+            updateUiState { copy(isLoadingMore = true) }
+            coinUseCases.getCoins(page = currentState.currentPage + 1).fold(
+                onSuccess = { flowCoins ->
+                    flowCoins.collect { newCoins ->
+                        updateUiState { 
+                            copy(
+                                coins = coins + newCoins,
+                                isLoadingMore = false,
+                                currentPage = currentPage + 1,
+                                hasMore = newCoins.isNotEmpty()
+                            )
+                        }
+                    }
+                },
+                onError = { exception ->
+                    updateUiState { copy(isLoadingMore = false, error = exception.message) }
+                    emitUiEffect(UiEffect.ShowError(exception.message ?: "An unknown error occurred"))
+                }
+            )
+        }
+    }
+    
+    private fun refreshCoins() {
+        viewModelScope.launch {
+            updateUiState { copy(isLoading = true, error = null) }
+            coinUseCases.refreshCoins(page = 1).fold(
+                onSuccess = { flowCoins ->
+                    flowCoins.collect { coins ->
+                        updateUiState { 
+                            copy(
+                                coins = coins,
+                                isLoading = false,
+                                currentPage = 1,
+                                hasMore = coins.isNotEmpty()
+                            )
+                        }
                     }
                 },
                 onError = { exception ->
