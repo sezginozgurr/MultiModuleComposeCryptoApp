@@ -2,7 +2,6 @@ package com.example.multimodulecomposecryptoapp.presentation.home.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -33,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.multimodulecomposecryptoapp.domain.model.Coin
 import java.math.BigDecimal
+import androidx.compose.ui.layout.ContentScale
 
 @Composable
 fun CoinItem(
@@ -67,7 +67,8 @@ fun CoinItem(
                 AsyncImage(
                     model = coin.imageUrl,
                     contentDescription = coin.name,
-                    modifier = Modifier.size(32.dp)
+                    modifier = Modifier.circularImage(44.dp),
+                    contentScale = ContentScale.Crop
                 )
             }
             
