@@ -22,9 +22,11 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
     
-    private const val API_KEY = "coinranking57478e79939e861d4d077297e54cdd0b833b957f88dad1b6"
-    private const val HEADER_API_KEY = "x-access-token"
-    
+    private const val API_KEY = "coinranking57478e79939e861d4d077297e54cdd0b833b957f88dad1b6" //fixme It is included here because it is a challenge project.
+
+    private const val HEADER_API_KEY = "x-access-token" //fixme It is included here because it is a challenge project.
+
+
     @Provides
     @Singleton
     fun provideAuthInterceptor(): Interceptor {
@@ -54,7 +56,8 @@ object AppModule {
     @Singleton
     fun provideCoinRankingApi(client: OkHttpClient): CoinRankingApi {
         return Retrofit.Builder()
-            .baseUrl("https://api.coinranking.com/")
+            .baseUrl("https://api.coinranking.com/") //fixme It is included here because it is a challenge project.
+
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()

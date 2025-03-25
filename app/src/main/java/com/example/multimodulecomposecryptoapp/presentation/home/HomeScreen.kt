@@ -72,7 +72,6 @@ fun HomeScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding)
         ) {
             if (uiState.isLoading) {
                 CircularProgressIndicator(
