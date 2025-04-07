@@ -60,12 +60,9 @@ fun HomeScreen(
     }
 
     LaunchedEffect(listState) {
-        snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }
-            .collect { lastIndex ->
-                if (lastIndex != null && lastIndex >= uiState.coins.size - 5 && !uiState.isLoadingMore) {
-                    viewModel.onAction(UiAction.LoadMoreCoins)
-                }
-            }
+        if (listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index == uiState.coins.size - 1 && !uiState.isLoadingMore) {
+            viewModel.onAction(UiAction.LoadMoreCoins)
+        }
     }
 
     Scaffold { padding ->
@@ -73,89 +70,97 @@ fun HomeScreen(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            if (uiState.isLoading) {
-                CircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            } else if (uiState.error != null) {
-                Text(
-                    text = uiState.error ?: stringResource(R.string.error_unknown),
-                    color = MaterialTheme.colorScheme.error,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 20.dp)
-                        .align(Alignment.Center)
-                )
-            } else if (uiState.coins.isEmpty()) {
-                Text(
-                    text = stringResource(R.string.error_coin_list_empty),
-                    style = MaterialTheme.typography.bodyLarge,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 20.dp)
-                        .align(Alignment.Center)
-                )
-            } else {
-                PullToRefreshBox(
-                    isRefreshing = uiState.isLoading,
-                    onRefresh = { viewModel.onAction(UiAction.RefreshCoins) }
-                ) {
-                    Column(modifier = Modifier.fillMaxSize()) {
-                        ElevatedCard(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp)
-                        ) {
-                            Column(
-                                modifier = Modifier.padding(16.dp)
+            when {
+                uiState.isLoading -> {
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                }
+                uiState.error != null -> {
+                    Text(
+                        text = uiState.error ?: stringResource(R.string.error_unknown),
+                        color = MaterialTheme.colorScheme.error,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 20.dp)
+                            .align(Alignment.Center)
+                    )
+                }
+                uiState.coins.isEmpty() -> {
+                    Text(
+                        text = stringResource(R.string.error_coin_list_empty),
+                        style = MaterialTheme.typography.bodyLarge,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 20.dp)
+                            .align(Alignment.Center)
+                    )
+                }
+                else -> {
+                    PullToRefreshBox(
+                        isRefreshing = uiState.isLoading,
+                        onRefresh = { viewModel.onAction(UiAction.RefreshCoins) }
+                    ) {
+                        Column(modifier = Modifier.fillMaxSize()) {
+                            ElevatedCard(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp)
                             ) {
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    verticalAlignment = Alignment.CenterVertically
+                                Column(
+                                    modifier = Modifier.padding(16.dp)
                                 ) {
-                                    Text(
-                                        text = stringResource(R.string.screen_home_ranking_title),
-                                        style = MaterialTheme.typography.titleLarge.copy(
-                                            fontWeight = FontWeight.Bold,
-                                            fontSize = 22.sp
-                                        ),
-                                        modifier = Modifier.weight(1f)
-                                    )
-                                    
-                                    FilterChip(
-                                        selected = true,
-                                        onClick = { },
-                                        label = { Text(stringResource(R.string.screen_home_24h_volume)) }
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Text(
+                                            text = stringResource(R.string.screen_home_ranking_title),
+                                            style = MaterialTheme.typography.titleLarge.copy(
+                                                fontWeight = FontWeight.Bold,
+                                                fontSize = 22.sp
+                                            ),
+                                            modifier = Modifier.weight(1f)
+                                        )
+                                        
+                                        FilterChip(
+                                            selected = true,
+                                            onClick = { },
+                                            label = { Text(stringResource(R.string.screen_home_24h_volume)) }
+                                        )
+                                    }
+
+                                    Spacer(modifier = Modifier.height(12.dp))
+                                }
+                            }
+
+                            LazyColumn(
+                                state = listState,
+                                modifier = Modifier.fillMaxSize()
+                            ) {
+                                items(
+                                    items = uiState.coins,
+                                    key = { coin -> coin.id }
+                                ) { coin ->
+                                    CoinItem(
+                                        coin = coin,
+                                        onCoinClick = { viewModel.onAction(UiAction.NavigateToDetail(coin.id)) },
+                                        onFavoriteClick = { viewModel.onAction(UiAction.ToggleFavorite(coin)) }
                                     )
                                 }
-
-                                Spacer(modifier = Modifier.height(12.dp))
-                            }
-                        }
-
-                        LazyColumn(
-                            state = listState,
-                            modifier = Modifier.fillMaxSize()
-                        ) {
-                            items(uiState.coins) { coin ->
-                                CoinItem(
-                                    coin = coin,
-                                    onCoinClick = { viewModel.onAction(UiAction.NavigateToDetail(coin.id)) },
-                                    onFavoriteClick = { viewModel.onAction(UiAction.ToggleFavorite(coin)) }
-                                )
-                            }
-                            
-                            if (uiState.isLoadingMore) {
-                                item {
-                                    Box(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(16.dp),
-                                        contentAlignment = Alignment.Center
-                                    ) {
-                                        CircularProgressIndicator()
+                                
+                                if (uiState.isLoadingMore) {
+                                    item {
+                                        Box(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(16.dp),
+                                            contentAlignment = Alignment.Center
+                                        )   {
+                                            CircularProgressIndicator()
+                                        }
                                     }
                                 }
                             }

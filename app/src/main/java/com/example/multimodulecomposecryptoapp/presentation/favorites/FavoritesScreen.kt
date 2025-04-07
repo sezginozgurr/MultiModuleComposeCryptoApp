@@ -27,7 +27,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.multimodulecomposecryptoapp.R
 import com.example.multimodulecomposecryptoapp.presentation.home.components.CoinItem
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FavoritesScreen(
     viewModel: FavoritesViewModel = hiltViewModel(),
@@ -53,40 +52,45 @@ fun FavoritesScreen(
                 )
             }
 
-            if (state.isLoading) {
-                CircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            } else if (state.error != null) {
-                Text(
-                    text = state.error ?: stringResource(R.string.error_unknown),
-                    color = MaterialTheme.colorScheme.error,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 20.dp)
-                        .align(Alignment.Center)
-                )
-            } else if (state.coins.isEmpty()) {
-                Text(
-                    text = stringResource(R.string.error_favorites_empty),
-                    style = MaterialTheme.typography.bodyLarge,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 20.dp)
-                        .align(Alignment.Center)
-                )
-            } else {
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    items(state.coins) { coin ->
-                        CoinItem(
-                            coin = coin,
-                            onCoinClick = { onCoinClick(coin.id) },
-                            onFavoriteClick = { viewModel.toggleFavorite(coin) }
-                        )
+            when {
+                state.isLoading -> {
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                }
+                state.error != null -> {
+                    Text(
+                        text = state.error ?: stringResource(R.string.error_unknown),
+                        color = MaterialTheme.colorScheme.error,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 20.dp)
+                            .align(Alignment.Center)
+                    )
+                }
+                state.coins.isEmpty() -> {
+                    Text(
+                        text = stringResource(R.string.error_favorites_empty),
+                        style = MaterialTheme.typography.bodyLarge,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 20.dp)
+                            .align(Alignment.Center)
+                    )
+                }
+                else -> {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        items(state.coins) { coin ->
+                            CoinItem(
+                                coin = coin,
+                                onCoinClick = { onCoinClick(coin.id) },
+                                onFavoriteClick = { viewModel.toggleFavorite(coin) }
+                            )
+                        }
                     }
                 }
             }
