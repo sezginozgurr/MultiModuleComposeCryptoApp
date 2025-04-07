@@ -24,7 +24,7 @@ class FavoritesViewModel @Inject constructor(
         getFavoriteCoins()
     }
     
-    fun getFavoriteCoins() {
+    private fun getFavoriteCoins() {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, error = null) }
             try {
