@@ -3,7 +3,7 @@ package com.example.multimodulecomposecryptoapp.presentation.favorites
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.multimodulecomposecryptoapp.domain.model.Coin
-import com.example.multimodulecomposecryptoapp.domain.use_case.CoinUseCases
+import com.example.multimodulecomposecryptoapp.domain.usecase.CoinUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

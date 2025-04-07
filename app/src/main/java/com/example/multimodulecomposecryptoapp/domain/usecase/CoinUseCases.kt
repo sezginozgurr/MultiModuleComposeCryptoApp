@@ -1,4 +1,4 @@
-package com.example.multimodulecomposecryptoapp.domain.use_case
+package com.example.multimodulecomposecryptoapp.domain.usecase
 
 import javax.inject.Inject
 

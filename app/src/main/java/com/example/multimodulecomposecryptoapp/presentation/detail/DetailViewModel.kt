@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.common.core.common.Resource
 import com.example.multimodulecomposecryptoapp.domain.model.CoinDetail
-import com.example.multimodulecomposecryptoapp.domain.use_case.CoinUseCases
+import com.example.multimodulecomposecryptoapp.domain.usecase.CoinUseCases
 import com.example.multimodulecomposecryptoapp.presentation.navigation.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -6,7 +6,7 @@ import com.example.common.core.common.fold
 import com.example.common.core.ui.mvi.MVI
 import com.example.common.core.ui.mvi.mvi
 import com.example.multimodulecomposecryptoapp.domain.model.Coin
-import com.example.multimodulecomposecryptoapp.domain.use_case.CoinUseCases
+import com.example.multimodulecomposecryptoapp.domain.usecase.CoinUseCases
 import com.example.multimodulecomposecryptoapp.presentation.home.HomeContract.UiAction
 import com.example.multimodulecomposecryptoapp.presentation.home.HomeContract.UiEffect
 import com.example.multimodulecomposecryptoapp.presentation.home.HomeContract.UiState
