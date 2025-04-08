@@ -21,7 +21,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,6 +47,13 @@ fun HomeScreen(
     val uiState by viewModel.uiState.collectAsState()
     val listState = rememberLazyListState()
 
+    val shouldLoadMore by remember {
+        derivedStateOf {
+            val lastVisibleItemIndex = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+            lastVisibleItemIndex >= listState.layoutInfo.totalItemsCount - 3
+        }
+    }
+
     LaunchedEffect(Unit) {
         viewModel.uiEffect.collect { effect ->
             when (effect) {
@@ -59,8 +68,8 @@ fun HomeScreen(
         }
     }
 
-    LaunchedEffect(listState) {
-        if (listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index == uiState.coins.size - 1 && !uiState.isLoadingMore) {
+    LaunchedEffect(shouldLoadMore) {
+        if (shouldLoadMore && !uiState.isLoadingMore && uiState.hasMore) {
             viewModel.onAction(UiAction.LoadMoreCoins)
         }
     }
