@@ -10,16 +10,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Divider
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -42,9 +41,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.multimodulecomposecryptoapp.R
 import java.math.BigDecimal
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,7 +50,7 @@ fun DetailScreen(
 ) {
     val state by viewModel.state.collectAsState()
     val coinDetail = state.coinDetail
-    
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
@@ -89,14 +85,14 @@ fun DetailScreen(
                     actions = {
                         IconButton(onClick = { viewModel.toggleFavorite() }) {
                             Icon(
-                                imageVector = if (coinDetail?.isFavorite == true) 
-                                    Icons.Default.Favorite 
-                                else 
+                                imageVector = if (coinDetail?.isFavorite == true)
+                                    Icons.Default.Favorite
+                                else
                                     Icons.Default.FavoriteBorder,
                                 contentDescription = stringResource(R.string.action_add_favorite),
-                                tint = if (coinDetail?.isFavorite == true) 
-                                    Color.Red 
-                                else 
+                                tint = if (coinDetail?.isFavorite == true)
+                                    Color.Red
+                                else
                                     MaterialTheme.colorScheme.onSurface
                             )
                         }
@@ -120,9 +116,7 @@ fun DetailScreen(
                     .padding(paddingValues)
             ) {
                 if (state.isLoading) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.align(Alignment.Center)
-                    )
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                 }
 
                 state.error?.let { error ->
@@ -134,7 +128,7 @@ fun DetailScreen(
                             .padding(16.dp)
                     )
                 }
-                
+
                 coinDetail?.let { detail ->
                     Column(
                         modifier = Modifier
@@ -144,76 +138,48 @@ fun DetailScreen(
                         CurrentPriceCard(
                             currentPrice = detail.price,
                             priceChangePercent = detail.priceChangePercentage24h,
-                            priceChangeAmount = calculatePriceChange(
-                                detail.price, 
+                            priceChangeAmount = viewModel.calculatePriceChange(
+                                detail.price,
                                 detail.priceChangePercentage24h
                             ),
                             highPrice = detail.price.multiply(BigDecimal("1.002")),
                             lowPrice = detail.price.multiply(BigDecimal("0.995")),
+                            formatLargePrice = viewModel::formatLargePrice,
+                            formatPrice = viewModel::formatPrice,
+                            formatChangePercent = viewModel::formatChangePercent,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(top = 16.dp)
                         )
-                        
+
                         Spacer(modifier = Modifier.height(16.dp))
-                        
-                        InfoCard(
-                            title = stringResource(R.string.screen_detail_title),
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
+
+                        InfoCard(title = stringResource(R.string.screen_detail_title)) {
                             InfoRow(label = stringResource(R.string.coin_info_name), value = detail.name)
                             InfoRow(label = stringResource(R.string.coin_info_symbol), value = detail.symbol)
                             InfoRow(label = stringResource(R.string.coin_info_rank), value = "#${detail.rank}")
-                            InfoRow(label = stringResource(R.string.coin_info_listing_date), value = formatDate(detail.listingDate))
+                            InfoRow(label = stringResource(R.string.coin_info_listing_date), value = viewModel.formatDate(detail.listingDate))
                         }
-                        
+
                         Spacer(modifier = Modifier.height(16.dp))
-                        
-                        InfoCard(
-                            title = stringResource(R.string.coin_stats),
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            InfoRow(
-                                label = stringResource(R.string.coin_market_cap), 
-                                value = "₺${formatLargeNumber(detail.marketCap)}"
-                            )
-                            InfoRow(
-                                label = stringResource(R.string.coin_24h_volume), 
-                                value = "₺${formatLargeNumber(detail.volume)}"
-                            )
-                            InfoRow(
-                                label = stringResource(R.string.coin_total_supply), 
-                                value = formatLargeNumber(detail.totalSupply)
-                            )
-                            InfoRow(
-                                label = stringResource(R.string.coin_circulating_supply), 
-                                value = formatLargeNumber(detail.circulatingSupply)
-                            )
+
+                        InfoCard(title = stringResource(R.string.coin_stats)) {
+                            InfoRow(label = stringResource(R.string.coin_market_cap), value = "₺${viewModel.formatLargeNumber(detail.marketCap)}")
+                            InfoRow(label = stringResource(R.string.coin_24h_volume), value = "₺${viewModel.formatLargeNumber(detail.volume)}")
+                            InfoRow(label = stringResource(R.string.coin_total_supply), value = viewModel.formatLargeNumber(detail.totalSupply))
+                            InfoRow(label = stringResource(R.string.coin_circulating_supply), value = viewModel.formatLargeNumber(detail.circulatingSupply))
                         }
-                        
+
                         Spacer(modifier = Modifier.height(16.dp))
-                        
-                        InfoCard(
-                            title = stringResource(R.string.coin_all_time_high),
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            InfoRow(
-                                label = stringResource(R.string.coin_price), 
-                                value = "₺${formatLargePrice(detail.allTimeHighPrice)}"
-                            )
-                            InfoRow(
-                                label = stringResource(R.string.coin_date), 
-                                value = formatDate(detail.allTimeHighDate)
-                            )
+
+                        InfoCard(title = stringResource(R.string.coin_all_time_high)) {
+                            InfoRow(label = stringResource(R.string.coin_price), value = "₺${viewModel.formatLargePrice(detail.allTimeHighPrice)}")
+                            InfoRow(label = stringResource(R.string.coin_date), value = viewModel.formatDate(detail.allTimeHighDate))
                         }
-                        
+
                         if (detail.description.isNotEmpty()) {
                             Spacer(modifier = Modifier.height(16.dp))
-                            
-                            InfoCard(
-                                title = stringResource(R.string.coin_description),
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
+                            InfoCard(title = stringResource(R.string.coin_description)) {
                                 Text(
                                     text = detail.description,
                                     style = MaterialTheme.typography.bodyMedium,
@@ -221,8 +187,85 @@ fun DetailScreen(
                                 )
                             }
                         }
-                        
+
                         Spacer(modifier = Modifier.height(24.dp))
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun CurrentPriceCard(
+    currentPrice: BigDecimal,
+    priceChangePercent: Double,
+    priceChangeAmount: BigDecimal,
+    highPrice: BigDecimal,
+    lowPrice: BigDecimal,
+    formatLargePrice: (BigDecimal) -> String,
+    formatPrice: (BigDecimal) -> String,
+    formatChangePercent: (Double) -> String,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier,
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                text = "GÜNCEL FİYAT",
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.Top) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = "₺${formatLargePrice(currentPrice)}",
+                        fontSize = 28.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    val changeColor = if (priceChangePercent >= 0) Color.Green else Color.Red
+                    val changeSign = if (priceChangePercent >= 0) "+" else ""
+
+                    Text(
+                        text = "$changeSign${formatChangePercent(priceChangePercent)}% ($changeSign₺${formatPrice(priceChangeAmount)})",
+                        color = changeColor,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(top = 4.dp)
+                    )
+                }
+
+                Column(horizontalAlignment = Alignment.End) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = "Yüksek: ",
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Text(
+                            text = "₺${formatPrice(highPrice)}",
+                            color = Color.Green,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = "Düşük: ",
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Text(
+                            text = "₺${formatPrice(lowPrice)}",
+                            color = Color.Red,
+                            fontWeight = FontWeight.Medium
+                        )
                     }
                 }
             }
@@ -248,7 +291,7 @@ fun InfoCard(
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(16.dp)
             )
-            
+
             content()
         }
     }
@@ -273,7 +316,7 @@ fun InfoRow(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.weight(1f)
             )
-            
+
             Text(
                 text = value,
                 style = MaterialTheme.typography.bodyMedium,
@@ -281,7 +324,7 @@ fun InfoRow(
                 color = MaterialTheme.colorScheme.onSurface
             )
         }
-        
+
         Divider(
             modifier = Modifier.padding(horizontal = 16.dp),
             color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
@@ -289,133 +332,5 @@ fun InfoRow(
     }
 }
 
-private fun calculatePriceChange(price: BigDecimal, changePercent: Double): BigDecimal {
-    return price.multiply(BigDecimal(changePercent / 100)).abs()
-}
 
-@Composable
-fun CurrentPriceCard(
-    currentPrice: BigDecimal,
-    priceChangePercent: Double,
-    priceChangeAmount: BigDecimal,
-    highPrice: BigDecimal,
-    lowPrice: BigDecimal,
-    modifier: Modifier = Modifier
-) {
-    Card(
-        modifier = modifier,
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Text(
-                text = "GÜNCEL FİYAT",
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-            
-            Spacer(modifier = Modifier.height(8.dp))
-            
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.Top
-            ) {
-                Column(
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text(
-                        text = "₺${formatLargePrice(currentPrice)}",
-                        fontSize = 28.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                    
-                    val changeColor = if (priceChangePercent >= 0) Color.Green else Color.Red
-                    val changeSign = if (priceChangePercent >= 0) "+" else ""
-                    
-                    Text(
-                        text = "$changeSign${formatChangePercent(priceChangePercent)}% ($changeSign₺${formatPrice(priceChangeAmount)})",
-                        color = changeColor,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(top = 4.dp)
-                    )
-                }
-                
-                Column(
-                    horizontalAlignment = Alignment.End
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = "Yüksek: ",
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        Text(
-                            text = "₺${formatPrice(highPrice)}",
-                            color = Color.Green,
-                            fontWeight = FontWeight.Medium
-                        )
-                    }
-                    
-                    Spacer(modifier = Modifier.height(8.dp))
-                    
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = "Düşük: ",
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        Text(
-                            text = "₺${formatPrice(lowPrice)}",
-                            color = Color.Red,
-                            fontWeight = FontWeight.Medium
-                        )
-                    }
-                }
-            }
-        }
-    }
-}
 
-private fun formatLargePrice(price: BigDecimal): String {
-    return when {
-        price >= BigDecimal(10000) -> {
-            val integerPart = price.toInt()
-            val decimalPart = (price - BigDecimal(integerPart)).multiply(BigDecimal(100)).toInt()
-            "%,d.%02d".format(java.util.Locale.US, integerPart, decimalPart)
-        }
-        price >= BigDecimal(1) -> "%.2f".format(price)
-        else -> "%.4f".format(price)
-    }
-}
-
-private fun formatPrice(price: BigDecimal): String {
-    return "%.2f".format(price)
-}
-
-private fun formatChangePercent(change: Double): String {
-    return "%.2f".format(change)
-}
-
-private fun formatDate(date: Date): String {
-    val formatter = SimpleDateFormat("dd MMM yyyy", Locale("tr"))
-    return formatter.format(date)
-}
-
-private fun formatLargeNumber(number: BigDecimal): String {
-    return when {
-        number >= BigDecimal(1_000_000_000) -> {
-            String.format("%.2f", number.divide(BigDecimal(1_000_000_000)).toDouble()) + " Milyar"
-        }
-        number >= BigDecimal(1_000_000) -> {
-            String.format("%.2f", number.divide(BigDecimal(1_000_000)).toDouble()) + " Milyon"
-        }
-        number >= BigDecimal(1_000) -> {
-            String.format("%.2f", number.divide(BigDecimal(1_000)).toDouble()) + " Bin"
-        }
-        else -> number.toString()
-    }
-} 

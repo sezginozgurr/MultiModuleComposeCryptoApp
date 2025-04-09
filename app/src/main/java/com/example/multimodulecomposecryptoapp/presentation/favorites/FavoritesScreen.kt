@@ -38,7 +38,7 @@ fun FavoritesScreen(
             TopAppBar(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(72.dp),
+                    .height(80.dp),
                 title = {
                     Text(
                         text = stringResource(R.string.screen_favorites_title),
